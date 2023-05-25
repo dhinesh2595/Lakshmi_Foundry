@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
+import firebase from "firebase"
 
 export default function Login() {
   const emailRef = useRef()
@@ -13,15 +14,38 @@ export default function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-
-    try {
-      setError("")
-      setLoading(true)
-      await login(emailRef.current.value, passwordRef.current.value)
-      history.push("/")
-    } catch {
-      setError("Failed to log in")
-    }
+    firebase.auth().signInWithEmailAndPassword(emailRef.current.value, passwordRef.current.value)
+    .then((userCredential) => {
+      // Get the user reference
+      const user = userCredential.user;
+      // Retrieve the user's Firestore document
+      const userDocRef = firebase.firestore().collection('users').doc(user.uid);
+      // Get the user's Firestore document data
+      userDocRef.get()
+        .then((doc) => {
+          if (doc.exists) {
+            const userData = doc.data();
+            const disabled = userData.disabled;
+            setError("")
+            if (disabled == 0) {
+              // User is not disabled, proceed with signed-in user logic
+              history.push("/")
+            } else {
+              // User is disabled, handle accordingly
+              setError("Please wait till you account is approved");
+            }
+          } else {
+            // User document does not exist
+            setError("User does not exist")
+          }
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    })
+    .catch((error) => {
+      setError(error.message);
+    });
 
     setLoading(false)
   }

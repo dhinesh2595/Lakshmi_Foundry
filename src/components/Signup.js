@@ -16,7 +16,7 @@ export default function Signup(props) {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
   const { errors } = useAuth()
-  console.log("pp",errors)
+
   async function handleSubmit(e) {
     e.preventDefault()
 
@@ -28,10 +28,8 @@ export default function Signup(props) {
      .then((userCredential) => {
        // User creation successful
        const user = userCredential.user;
-       console.log("User created:", user);
        createUserDocument(user);
        setError('')
-       firebase.auth().signOut();
        setMessage("Please wait till your accout is approved")
      })
      .catch((error) => {
@@ -39,7 +37,6 @@ export default function Signup(props) {
        // User creation failed
        const errorCode = error.code;
        const errorMessage = error.message;
-       console.error("Error creating user:", errorCode, errorMessage);
      });
        
 
