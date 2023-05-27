@@ -28,6 +28,7 @@ export const createUserDocument = async (user, additionalData) => {
       await userRef.set({
         email,
         createdAt: new Date(),
+        disabled: 1,
       });
     } catch (error) {
       console.log('Error in creating user', error);
