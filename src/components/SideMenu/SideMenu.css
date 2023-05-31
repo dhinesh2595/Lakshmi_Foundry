@@ -1,0 +1,69 @@
+.side-menu {
+  position: fixed;
+  top: 80px; /* Adjust the value as needed based on the height of your top bar */
+  left: -250px;
+  width: 250px;
+  height: 100%; /* Adjust the value to leave space for the top bar */
+  background-color: #d33100;
+  transition: left 0.3s ease;
+  z-index: 999;
+ 
+}
+  
+  .side-menu.open {
+    left: 0; /* Slide the menu to the viewport */
+  }
+  .hamburger-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+  }
+  .top-bar {
+    display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  .menu-list {
+    list-style: none;
+    padding: 16px;
+    margin: 0;
+  }
+  
+  .menu-list li {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .menu-icon {
+    margin-right: 8px;
+    margin-left: 8px; /* Add left spacing for the icons */
+  }
+  
+  .menu-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .menu-list li a{
+    color: #fff; /* Change to white */
+  }
+  .menu-list li a:hover{
+    text-decoration: none !important; /* Change to white */
+  }
+  
+  .menu-link:hover {
+    color: #777;
+  }
+  .noPadding{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  

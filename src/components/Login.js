@@ -26,8 +26,9 @@ export default function Login() {
           if (doc.exists) {
             const userData = doc.data();
             const disabled = userData.disabled;
+            const isAdmin = userData.is_admin;
             setError("")
-            if (disabled == 0) {
+            if (!disabled || isAdmin == 1) {
               // User is not disabled, proceed with signed-in user logic
               history.push("/")
             } else {

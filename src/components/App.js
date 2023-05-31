@@ -8,14 +8,19 @@ import Login from "./Login"
 import PrivateRoute from "./PrivateRoute"
 import ForgotPassword from "./ForgotPassword"
 import UpdateProfile from "./UpdateProfile"
+import SideMenu from "./SideMenu/SideMenu"
+import UsersPage from "../Pages/UsersPage"
 
 function App() {
   return (
+    <div>
+    <SideMenu />
     <Container
       className="d-flex align-items-center justify-content-center"
       style={{ minHeight: "100vh" }}
     >
-      <div className="w-100" style={{ maxWidth: "400px" }}>
+     
+      <div className="w-100">
         <Router>
           <AuthProvider>
             <Switch>
@@ -24,11 +29,13 @@ function App() {
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
               <Route path="/forgot-password" component={ForgotPassword} />
+              <Route path="/users" component={UsersPage} />
             </Switch>
           </AuthProvider>
         </Router>
       </div>
     </Container>
+    </div>
   )
 }
 

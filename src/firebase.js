@@ -23,12 +23,14 @@ export const createUserDocument = async (user, additionalData) => {
   const snapshot = await userRef.get();
 
   if (!snapshot.exists) {
+    let name = additionalData.name;
     const { email } = user;
     try {
       await userRef.set({
+        name,
         email,
         createdAt: new Date(),
-        disabled: 1,
+        disabled: true,
       });
     } catch (error) {
       console.log('Error in creating user', error);
