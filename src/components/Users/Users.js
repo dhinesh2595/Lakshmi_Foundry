@@ -37,7 +37,7 @@ const Users = () => {
     setEditUser(user);
     setEditedName(user.name);
     setEditedEmail(user.email);
-    setEditedRole(user.role);
+    setEditedRole(user.role || '');
     setEditedDisabled(user.disabled || false);
   };
 
