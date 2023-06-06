@@ -11,6 +11,8 @@ const db = firebase.firestore();
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersPerPage] = useState(5);
   const [editUser, setEditUser] = useState(null);
   const [editedName, setEditedName] = useState('');
   const [editedEmail, setEditedEmail] = useState('');
@@ -37,7 +39,7 @@ const Users = () => {
     setEditUser(user);
     setEditedName(user.name);
     setEditedEmail(user.email);
-    setEditedRole(user.role || '');
+    setEditedRole(user.role);
     setEditedDisabled(user.disabled || false);
   };
 
@@ -70,6 +72,12 @@ const Users = () => {
     }
   };
 
+  // Pagination logic
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
       <Container fluid>
         <h2 className="text-center mt-5">Users</h2>
@@ -153,9 +161,63 @@ const Users = () => {
             </Col>
           </Row>
         ))}
+        <Row>
+        <Col className="d-flex justify-content-center">
+          <Pagination
+            usersPerPage={usersPerPage}
+            totalUsers={users.length}
+            currentPage={currentPage}
+            paginate={paginate}
+          />
+        </Col>
+      </Row>
       </Container>
   );
   
+};
+const Pagination = ({ usersPerPage, totalUsers, currentPage, paginate }) => {
+  const pageNumbers = Math.ceil(totalUsers / usersPerPage);
+
+  const handlePagination = (pageNumber) => {
+    if (pageNumber < 1 || pageNumber > pageNumbers) {
+      return; // Invalid page number, do nothing
+    }
+    paginate(pageNumber);
+  };
+
+  const renderPageNumbers = () => {
+    const numbers = [];
+    for (let i = 1; i <= pageNumbers; i++) {
+      numbers.push(
+        <li
+          key={i}
+          className={`page-item ${currentPage === i ? 'active' : ''}`}
+          onClick={() => handlePagination(i)}
+        >
+          <button className="page-link">{i}</button>
+        </li>
+      );
+    }
+    return numbers;
+  };
+
+  return (
+    <nav>
+      <ul className="pagination">
+        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+          <button className="page-link" onClick={() => handlePagination(currentPage - 1)}>
+            Previous
+          </button>
+        </li>
+        {renderPageNumbers()}
+        <li className={`page-item ${currentPage === pageNumbers ? 'disabled' : ''}`}>
+          <button className="page-link" onClick={() => handlePagination(currentPage + 1)}>
+            Next
+          </button>
+        </li>
+      </ul>
+    </nav>
+  );
 };
 
 export default Users;
