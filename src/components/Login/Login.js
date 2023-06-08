@@ -1,13 +1,18 @@
 import React, { useRef, useState } from "react";
-import '../Login/Login.css'; // Create this file for custom styles
+import "../Login/Login.css"; // Create this file for custom styles
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import firebase from "firebase";
-import { BrowserRouter as Router, Route, Switch, useLocation } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useLocation,
+} from "react-router-dom";
 
 export default function Login() {
-  const location = useLocation(); 
+  const location = useLocation();
   const emailRef = useRef();
   const passwordRef = useRef();
   const { login } = useAuth();
