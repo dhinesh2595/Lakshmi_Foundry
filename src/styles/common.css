@@ -1,0 +1,66 @@
+.btn-primary:hover{
+    background-color: #d33100 !important;
+    border-color: #d33100 !important;
+    color: #fff !important
+}
+.btn-primary{
+    background-color: #d33100 !important;
+    border-color: #d33100 !important;
+    color: #fff !important
+}
+#root{
+    background:#eef1f4 !important
+}
+
+a{
+    color:#d33100 !important
+}
+a:hover{
+    color:#d33100 !important
+}
+.error-message{
+    color:red
+}
+.auth-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .auth-card {
+    width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .auth-link {
+    margin-top: 10px;
+  }
+  .loader {
+    border: 4px solid #f3f3f3; /* Light gray border */
+    border-top: 4px solid #3498db; /* Blue border */
+    border-radius: 50%; /* Create a circular shape */
+    width: 20px; /* Set the width and height of the loader */
+    height: 20px;
+    animation: spin 1s linear infinite; /* Apply the spinning animation */
+    margin: 0 auto; /* Center the loader */
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg); /* Start at 0 degrees */
+    }
+    100% {
+      transform: rotate(360deg); /* End at 360 degrees */
+    }
+  }
+  
+  /* Media Queries */
+  @media (max-width: 768px) {
+    .auth-card {
+      width: 90%;
+      max-width: 400px;
+    }
+  }
