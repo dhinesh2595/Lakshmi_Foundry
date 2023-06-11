@@ -22,7 +22,7 @@ function App() {
   return (
     <div>
       <Router>
-        {location.pathname != "/login" && <SideMenu />}
+        {(location.pathname != "/login" && location.pathname != "/signup")  && <SideMenu />}
         <Container
           className="d-flex align-items-center justify-content-center"
           style={{ minHeight: "100vh" }}

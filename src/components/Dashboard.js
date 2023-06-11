@@ -32,9 +32,9 @@ export default function Dashboard() {
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        <Button variant="link" onClick={handleLogout}>
+        <Link to="/#" onClick={handleLogout}>
           Log Out
-        </Button>
+        </Link>
       </div>
     </>
   )

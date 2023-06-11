@@ -1,11 +1,23 @@
 .btn-primary:hover{
     background-color: #d33100 !important;
     border-color: #d33100 !important;
+    color: #fff !important
 }
 .btn-primary{
     background-color: #d33100 !important;
     border-color: #d33100 !important;
+    color: #fff !important
 }
 #root{
     background:#eef1f4 !important
+}
+
+a{
+    color:#d33100 !important
+}
+a:hover{
+    color:#d33100 !important
+}
+.error-message{
+    color:red
 }

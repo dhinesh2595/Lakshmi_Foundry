@@ -9,6 +9,9 @@
   z-index: 999;
  
 }
+.side-menu a {
+  color:#fff !important
+}
   
   .side-menu.open {
     left: 0; /* Slide the menu to the viewport */
