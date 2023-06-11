@@ -24,165 +24,170 @@ export default function Signup() {
   }, [showSuccessMessage]);
   return (
     <>
-      <Card className="signup-card">
-        <Card.Body>
-          <h2 className="text-center mb-4">Sign Up</h2>
-          <Formik
-            initialValues={{
-              name: "",
-              email: "",
-              password: "",
-              passwordConfirm: "",
-            }}
-            validate={(values) => {
-              const errors = {};
+      <div className="auth-form-container">
+        <Card className="auth-card">
+          <Card.Body>
+            <h2 className="text-center mb-4">Sign Up</h2>
+            <Formik
+              initialValues={{
+                name: "",
+                email: "",
+                password: "",
+                passwordConfirm: "",
+              }}
+              validate={(values) => {
+                const errors = {};
 
-              if (!values.name) {
-                errors.name = "Name is required";
-              }
+                if (!values.name) {
+                  errors.name = "Name is required";
+                }
 
-              if (!values.email) {
-                errors.email = "Email is required";
-              } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-                errors.email = "Invalid email address";
-              }
+                if (!values.email) {
+                  errors.email = "Email is required";
+                } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+                  errors.email = "Invalid email address";
+                }
 
-              if (!values.password) {
-                errors.password = "Password is required";
-              } else if (values.password.length < 6) {
-                errors.password = "Password must be at least 6 characters long";
-              }
+                if (!values.password) {
+                  errors.password = "Password is required";
+                } else if (values.password.length < 6) {
+                  errors.password =
+                    "Password must be at least 6 characters long";
+                }
 
-              if (!values.passwordConfirm) {
-                errors.passwordConfirm = "Password Confirmation is required";
-              } else if (values.passwordConfirm !== values.password) {
-                errors.passwordConfirm = "Passwords do not match";
-              }
+                if (!values.passwordConfirm) {
+                  errors.passwordConfirm = "Password Confirmation is required";
+                } else if (values.passwordConfirm !== values.password) {
+                  errors.passwordConfirm = "Passwords do not match";
+                }
 
-              return errors;
-            }}
-            onSubmit={async (
-              values,
-              { setSubmitting, setStatus, resetForm }
-            ) => {
-              try {
-                setLoading(true);
-                setError("");
+                return errors;
+              }}
+              onSubmit={async (
+                values,
+                { setSubmitting, setStatus, resetForm }
+              ) => {
+                try {
+                  setLoading(true);
+                  setError("");
 
-                const userCredential = await firebase
-                  .auth()
-                  .createUserWithEmailAndPassword(
-                    values.email,
-                    values.password
+                  const userCredential = await firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(
+                      values.email,
+                      values.password
+                    );
+
+                  const user = userCredential.user;
+
+                  const additionalData = {
+                    name: values.name,
+                  };
+
+                  await createUserDocument(user, additionalData);
+                  setStatus({
+                    success: "Please wait until your account is approved",
+                  });
+                  setShowSuccessMessage(true);
+                  setSuccessMessage(
+                    "Please wait until your account is approved"
                   );
+                  resetForm();
+                } catch (error) {
+                  setError(error.message);
+                  setStatus({ error: error.message });
+                }
 
-                const user = userCredential.user;
+                setLoading(false);
+              }}
+            >
+              {({ isSubmitting, status }) => (
+                <>
+                  {status && status.error && (
+                    <Alert variant="danger">{status.error}</Alert>
+                  )}
+                  {showSuccessMessage && (
+                    <Alert variant="success">{successMessage}</Alert>
+                  )}
+                  <Form>
+                    <div className="form-group">
+                      <label htmlFor="name">Name</label>
+                      <Field
+                        type="text"
+                        id="name"
+                        name="name"
+                        className="form-control"
+                      />
+                      <ErrorMessage
+                        name="name"
+                        component="div"
+                        className="error-message"
+                      />
+                    </div>
 
-                const additionalData = {
-                  name: values.name,
-                };
+                    <div className="form-group">
+                      <label htmlFor="email">Email</label>
+                      <Field
+                        type="email"
+                        id="email"
+                        name="email"
+                        className="form-control"
+                      />
+                      <ErrorMessage
+                        name="email"
+                        component="div"
+                        className="error-message"
+                      />
+                    </div>
 
-                await createUserDocument(user, additionalData);
-                setStatus({
-                  success: "Please wait until your account is approved",
-                });
-                setShowSuccessMessage(true);
-                setSuccessMessage("Please wait until your account is approved");
-                resetForm();
-              } catch (error) {
-                setError(error.message);
-                setStatus({ error: error.message });
-              }
+                    <div className="form-group">
+                      <label htmlFor="password">Password</label>
+                      <Field
+                        type="password"
+                        id="password"
+                        name="password"
+                        className="form-control"
+                      />
+                      <ErrorMessage
+                        name="password"
+                        component="div"
+                        className="error-message"
+                      />
+                    </div>
 
-              setLoading(false);
-            }}
-          >
-            {({ isSubmitting, status }) => (
-              <>
-                {status && status.error && (
-                  <Alert variant="danger">{status.error}</Alert>
-                )}
-                {showSuccessMessage && (
-                  <Alert variant="success">{successMessage}</Alert>
-                )}
-                <Form>
-                  <div className="form-group">
-                    <label htmlFor="name">Name</label>
-                    <Field
-                      type="text"
-                      id="name"
-                      name="name"
-                      className="form-control"
-                    />
-                    <ErrorMessage
-                      name="name"
-                      component="div"
-                      className="error-message"
-                    />
-                  </div>
+                    <div className="form-group">
+                      <label htmlFor="passwordConfirm">
+                        Password Confirmation
+                      </label>
+                      <Field
+                        type="password"
+                        id="passwordConfirm"
+                        name="passwordConfirm"
+                        className="form-control"
+                      />
+                      <ErrorMessage
+                        name="passwordConfirm"
+                        component="div"
+                        className="error-message"
+                      />
+                    </div>
 
-                  <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <Field
-                      type="email"
-                      id="email"
-                      name="email"
-                      className="form-control"
-                    />
-                    <ErrorMessage
-                      name="email"
-                      component="div"
-                      className="error-message"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <Field
-                      type="password"
-                      id="password"
-                      name="password"
-                      className="form-control"
-                    />
-                    <ErrorMessage
-                      name="password"
-                      component="div"
-                      className="error-message"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="passwordConfirm">
-                      Password Confirmation
-                    </label>
-                    <Field
-                      type="password"
-                      id="passwordConfirm"
-                      name="passwordConfirm"
-                      className="form-control"
-                    />
-                    <ErrorMessage
-                      name="passwordConfirm"
-                      component="div"
-                      className="error-message"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={isSubmitting}
-                  >
-                    Sign Up
-                  </button>
-                </Form>
-              </>
-            )}
-          </Formik>
-        </Card.Body>
-      </Card>
-      <div className="text-center mt-2 signup-link">
-        Already have an account? <Link to="/login">Log In</Link>
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={isSubmitting}
+                    >
+                      Sign Up
+                    </button>
+                  </Form>
+                </>
+              )}
+            </Formik>
+            <div className="text-center mt-2 signup-link">
+              Already have an account? <Link to="/login">Log In</Link>
+            </div>
+          </Card.Body>
+        </Card>
       </div>
     </>
   );
