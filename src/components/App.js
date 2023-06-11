@@ -1,15 +1,24 @@
-import React from "react"
-import Signup from "./Signup"
-import { Container } from "react-bootstrap"
-import { AuthProvider } from "../contexts/AuthContext"
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import Dashboard from "./Dashboard"
-import Login from "./Login"
-import PrivateRoute from "./PrivateRoute"
-import ForgotPassword from "./ForgotPassword"
-import UpdateProfile from "./UpdateProfile"
+import React from "react";
+import Signup from "./Signup";
+import { Container } from "react-bootstrap";
+import { AuthProvider } from "../contexts/AuthContext";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useLocation,
+} from "react-router-dom";
+import '../styles/common.css'; // Create this file for custom styles
+import Dashboard from "./Dashboard";
+import Login from "./Login/Login";
+import PrivateRoute from "./PrivateRoute";
+import ForgotPassword from "./ForgotPassword";
+import UpdateProfile from "./UpdateProfile";
+import SideMenu from "./SideMenu/SideMenu";
+import UsersPage from "../Pages/UsersPage";
 
 function App() {
+  const location = useLocation(); //removed brackets
   return (
     <div>
       <Router>
@@ -39,4 +48,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
