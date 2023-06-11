@@ -1,6 +1,6 @@
 .side-menu {
-  position: fixed;
-  top: 80px; /* Adjust the value as needed based on the height of your top bar */
+  position: absolute;
+  top: 74px; /* Adjust the value as needed based on the height of your top bar */
   left: -250px;
   width: 250px;
   height: 100%; /* Adjust the value to leave space for the top bar */

@@ -1,55 +1,92 @@
-import React, { useRef, useState } from "react"
-import { Form, Button, Card, Alert } from "react-bootstrap"
-import { useAuth } from "../contexts/AuthContext"
-import { Link } from "react-router-dom"
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Card, Alert } from "react-bootstrap";
+import { useAuth } from "../contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 export default function ForgotPassword() {
-  const emailRef = useRef()
-  const { resetPassword } = useAuth()
-  const [error, setError] = useState("")
-  const [message, setMessage] = useState("")
-  const [loading, setLoading] = useState(false)
+  const { resetPassword } = useAuth();
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-
+  const handleSubmit = async (
+    values,
+    { setSubmitting, resetForm, setStatus }
+  ) => {
     try {
-      setMessage("")
-      setError("")
-      setLoading(true)
-      await resetPassword(emailRef.current.value)
-      setMessage("Check your inbox for further instructions")
-    } catch {
-      setError("Failed to reset password")
+      await resetPassword(values.email);
+      setSubmitting(false);
+      resetForm();
+      setStatus({
+        message: "Check your inbox for further instructions",
+        error: false,
+      });
+    } catch (error) {
+      console.error(error);
+      setStatus({ message: "Failed to reset password", error: true });
     }
-
-    setLoading(false)
-  }
+  };
 
   return (
     <>
-      <Card>
-        <Card.Body>
-          <h2 className="text-center mb-4">Password Reset</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {message && <Alert variant="success">{message}</Alert>}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group id="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" ref={emailRef} required />
-            </Form.Group>
-            <Button disabled={loading} className="w-100" type="submit">
-              Reset Password
-            </Button>
-          </Form>
-          <div className="w-100 text-center mt-3">
-            <Link to="/login">Login</Link>
-          </div>
-        </Card.Body>
-      </Card>
-      <div className="w-100 text-center mt-2">
-        Need an account? <Link to="/signup">Sign Up</Link>
+      <div className="auth-form-container">
+        <Card className="auth-card">
+          <Card.Body>
+            <h2 className="text-center mb-4">Password Reset</h2>
+            <Formik
+              initialValues={{
+                email: "",
+              }}
+              validate={(values) => {
+                const errors = {};
+
+                if (!values.email) {
+                  errors.email = "Email is required";
+                }
+
+                return errors;
+              }}
+              onSubmit={handleSubmit}
+            >
+              {({ isSubmitting, status }) => (
+                <Form>
+                  {status && status.message && (
+                    <Alert variant={status.error ? "danger" : "success"}>
+                      {status.message}
+                    </Alert>
+                  )}
+                  <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <Field
+                      type="email"
+                      id="email"
+                      name="email"
+                      className="form-control"
+                    />
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={isSubmitting}
+                  >
+                    Reset Password
+                  </button>
+                </Form>
+              )}
+            </Formik>
+            <div className="w-100 text-center mt-3">
+              <Link to="/login">Login</Link>
+            </div>
+            <div className="w-100 text-center mt-2">
+              Need an account? <Link to="/signup">Sign Up</Link>
+            </div>
+          </Card.Body>
+        </Card>
       </div>
     </>
-  )
+  );
 }

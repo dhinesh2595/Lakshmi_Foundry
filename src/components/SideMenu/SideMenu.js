@@ -1,21 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Container, Button } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import "../SideMenu/SideMenu.css"; // Create this file for custom styles
 import "bootstrap/dist/css/bootstrap.min.css";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { FaUserCircle, FaUsers, FaShoppingCart } from "react-icons/fa";
+import { FaUserCircle, FaUsers, FaShoppingCart,FaSignOutAlt } from "react-icons/fa";
 import TopBar from "../TopBar";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, useLocation } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const SideMenu = () => {
   const location = useLocation();
   const [menuVisible, setMenuVisible] = useState(false);
   const menuRef = useRef();
+  const history = useHistory()
+  const [error, setError] = useState("")
 
   useEffect(() => {
     // Add event listener to detect clicks outside the menu
@@ -37,31 +34,47 @@ const SideMenu = () => {
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
+  async function handleLogout() {
+    setError("")
+
+    try {
+      setMenuVisible(!menuVisible);
+      history.push("/login")
+    } catch {
+      setError("Failed to log out")
+    }
+  }
 
   return (
     <Container fluid className="noPadding">
-      {location.pathname != "/login" && (
-        <TopBar onToggleMenu={() => setMenuVisible(!menuVisible)} />
+      {location.pathname !== "/login" && (
+        <TopBar onToggleMenu={toggleMenu} />
       )}
       <div ref={menuRef} className={`side-menu${menuVisible ? " open" : ""}`}>
         <ul className="menu-list">
           <li>
-            <a href="#customer">
+            <Link to="/customers">
               <FaUsers size={18} className="menu-icon" />
               Customer
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#user">
+            <Link to="/users">
               <FaUserCircle size={18} className="menu-icon" />
               User
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#orders">
+            <Link to="/orders">
               <FaShoppingCart size={18} className="menu-icon" />
               Orders
-            </a>
+            </Link>
+          </li>
+          <li>
+          <Link to="/#" onClick={handleLogout}>
+              <FaSignOutAlt size={18} className="menu-icon" />
+              Sign out
+            </Link>
           </li>
         </ul>
       </div>
