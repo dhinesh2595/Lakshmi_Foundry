@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Signup from "./Signup";
 import { Container } from "react-bootstrap";
 import { AuthProvider } from "../contexts/AuthContext";
@@ -18,7 +18,11 @@ import SideMenu from "./SideMenu/SideMenu";
 import UsersPage from "../Pages/UsersPage";
 
 function App() {
-  const location = useLocation(); //removed brackets
+  const location = useLocation(); 
+  useEffect(() => {
+  
+  }, [location]);
+
   return (
     <div>
       <Router>
